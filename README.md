@@ -2,6 +2,7 @@
 ---
 
 **Advanced Lane Finding Project**
+Finding lane markings is essential for self-driving cars to operate properly on a road. The following presents an algorithm to achieve such tracking using color thresholding, sliding windows and polynomial fitting. 
 
 The steps of this project are the following:
 
