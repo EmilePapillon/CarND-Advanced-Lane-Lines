@@ -3,7 +3,7 @@
 
 **Advanced Lane Finding Project**
 
-Finding lane markings is essential for self-driving cars to operate properly on a road. The following presents an algorithm to achieve such tracking using color thresholding, sliding windows and polynomial fitting. 
+Finding lane markings is essential for self-driving cars to operate properly on a road. The following presents an algorithm to achieve such tracking using color thresholding, sliding windows and polynomial fitting. The result is a description of the lane marking that we can use to do path planning or control the vehicle. The results here is used to plot the lane marking over the image. 
 
 The steps of this project are the following:
 
@@ -50,13 +50,17 @@ I then used the output `objpoints` and `imgpoints` to compute the camera calibra
 
 #### 2. Use color transforms, gradients or other methods to create a thresholded binary image. Below is an example of a binary image result.
 
-I used a combination of color and gradient thresholds to generate a binary image (thresholding steps in the third code cell of the Jupyter notebook located in "./Lane_Marking_Tracker.ipynb".  Here's an example of my output for this step. 
+The first step is to get rid of some noise by applying color space thresholding to the original frames.
 
-I used sobel directional threshold, and HLS color space thresholding using the L and S layers because I found them to be the most effectives ones at selecting lane markings. S layer information is particularly useful for the yellow lines. 
+I used a combination of color and gradient thresholds to generate a binary image (thresholding steps in the third code cell of the Jupyter notebook located in "./Lane_Marking_Tracker.ipynb".  Here's an example of my output for this step. 
 
 ![alt text][image3]
 
+I used sobel directional threshold, and HLS color space thresholding using the L and S layers because I found them to be the most effectives ones at selecting lane markings. S (saturation) layer information is particularly useful for the yellow lines. 
+
 #### 3. Then, perform a perspective transform and (example of a transformed image below).
+
+We are trying to get the curvature information from the lane marking. To do this, we first need to transform the image to abstract the perspective inherent to camera images.
 
 The code for my perspective transform includes a function called `warper()`, which appears in cell 4 in the Jupyter Notebook `Lane_Marking_Tracker.ipynb` (./Lane_Marking_Tracker.ipynb).  The `warper()` function takes as inputs an image (`img`), as well as source (`src`) and destination (`dst`) points.  I chose the hardcode the source and destination points in the following manner:
 
