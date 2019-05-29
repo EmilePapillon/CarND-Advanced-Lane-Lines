@@ -28,19 +28,13 @@ The goals / steps of this project are the following:
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/571/view) Points
 
-### Here I will consider the rubric points individually and describe how I addressed each point in my implementation.  
-
 ---
 
-### Writeup / README
-
-#### 1. Provide a Writeup / README that includes all the rubric points and how you addressed each one.  You can submit your writeup as markdown or pdf.  [Here](https://github.com/udacity/CarND-Advanced-Lane-Lines/blob/master/writeup_template.md) is a template writeup for this project you can use as a guide and a starting point.  
-
-You're reading it!
+### Lane marking detection using sliding windows.
 
 ### Camera Calibration
 
-#### 1. Briefly state how you computed the camera matrix and distortion coefficients. Provide an example of a distortion corrected calibration image.
+#### 1. First, compute the camera matrix and distortion coefficients. Use the result to generate a distortion corrected calibration image.
 
 The code for this step is contained in the second code cell of the Jupyter notebook located in "./Lane_Marking_Tracker.ipynb". The function calibrate(calibration_images_path='camera_cal/cal*.jpg') takes in as argument a string containing the glob wildcard to the calubration data. It returns the matrix mtx and the object dist to use with openCV's cv2.undistort() function to get the undistorted image.
 
@@ -53,12 +47,12 @@ I then used the output `objpoints` and `imgpoints` to compute the camera calibra
 
 ### Pipeline (single images)
 
-#### 1. Provide an example of a distortion-corrected image.
+#### 1. Example of a distortion-corrected image.
 
 To demonstrate this step, I will describe how I apply the distortion correction to one of the test images like this one:
 ![alt text][image1]
 
-#### 2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
+#### 2. Use color transforms, gradients or other methods to create a thresholded binary image. Below is an example of a binary image result.
 
 I used a combination of color and gradient thresholds to generate a binary image (thresholding steps in the third code cell of the Jupyter notebook located in "./Lane_Marking_Tracker.ipynb".  Here's an example of my output for this step. 
 
@@ -66,7 +60,7 @@ I used sobel directional threshold, and HLS color space thresholding using the L
 
 ![alt text][image3]
 
-#### 3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
+#### 3. Then, perform a perspective transform and (example of a transformed image below).
 
 The code for my perspective transform includes a function called `warper()`, which appears in cell 4 in the Jupyter Notebook `Lane_Marking_Tracker.ipynb` (./Lane_Marking_Tracker.ipynb).  The `warper()` function takes as inputs an image (`img`), as well as source (`src`) and destination (`dst`) points.  I chose the hardcode the source and destination points in the following manner:
 
@@ -99,7 +93,7 @@ I verified that my perspective transform was working as expected by drawing the 
 
 ![alt text][image4]
 
-#### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
+#### 4. Identify lane-line pixels and fit their positions with a polynomial.
 
 In order to fit the lane lines with a 2nd order polynomial, I first used a sliding windows approach that used a histogram technique to locate the initial windows. When I had a good idea of the location of the lane lines by applying a first iteration of the sliding windows, I limited my search to a region around the known lane lines. To reduce the jitter of the lane lines, I used a moving average of correctly fitted lines over 15 frames of the video. This was all implemented in cells 5 and 6 of the Jupyter Notebook at ./Lane_Marking_Tracker.ipynb
 
@@ -107,7 +101,7 @@ The result of the fitting was the following :
 
 ![alt text][image5]
 
-#### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
+#### 5. Calculate the radius of curvature of the lane and the position of the vehicle with respect to center.
 
 I did this in the first cell in my code in `./Lane_Marking_Tracker.ipynb`
 The Line class implements private methods for calculating curvature and distance to lane marking. Those methods are `__calculate_curvature(self):` and `__calculate_distance(self)`, respectively. Those methods are called every time a new line marking is written into the line object using the set_line(self, pointsx, pointsy) setter method and passing the x and y points corresponding to the lane lines found. The Line object fits the line points and calculate the curvature using the curvature formula :
@@ -117,7 +111,7 @@ The distance to the lane lines was found by taking the x value corresponding to 
 
 To make things look better, curvature and distance were smoothened using a mooving average on 15 frames before being displayed.
 
-#### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
+#### 6. Example of the result plotted back down onto the road such that the lane area is identified clearly.
 
 I implemented this step in the ninth line in my code in `./Lane_Marking_Tracker.ipynb` in the function `image_pipeline(frame,left_marker,right_marker, debug=False)` at the end.  In fact, this is where the whole pipeline is put togheter and the code to unwarp was not encapsulated although it would've made sense to do so. Here is an example of my result on a test image:
 
@@ -127,14 +121,12 @@ I implemented this step in the ninth line in my code in `./Lane_Marking_Tracker.
 
 ### Pipeline (video)
 
-#### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (wobbly lines are ok but no catastrophic failures that would cause the car to drive off the road!).
+#### 1. Final video output.  
 
 Here's a [link to my video result](./output_images/video_output.mp4)
 
 ---
 
 ### Discussion
-
-#### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
 I used basic thresholding techniques for identifying the lane markings. My pipeline did not do well for the more challenging videos, more especifically where there is a strong contrast between 2 tones of asfalt. The pipeline will identify the interface between the 2 types of asfalt as a lane marking. If I had more time I would implement a refined version of the thresholding to filter out these kind of issues. 
