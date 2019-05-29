@@ -36,6 +36,8 @@ The steps of this project are the following:
 
 #### 1. First, compute the camera matrix and distortion coefficients. Use the result to generate a distortion corrected calibration image.
 
+The camera image comes distorted by the lens, and this will be a problem for accurate lane marking detection. We first need to correct the image for distorsion using openCV. Refer to the Lane_Marking_Tracker.ipynb to follow along with the code. 
+
 The code for this step is contained in the second code cell of the Jupyter notebook located in "./Lane_Marking_Tracker.ipynb". The function calibrate(calibration_images_path='camera_cal/cal*.jpg') takes in as argument a string containing the glob wildcard to the calubration data. It returns the matrix mtx and the object dist to use with openCV's cv2.undistort() function to get the undistorted image.
 
 I start by preparing "object points", which will be the (x, y, z) coordinates of the chessboard corners in the world. Here I am assuming the chessboard is fixed on the (x, y) plane at z=0, such that the object points are the same for each calibration image.  Thus, `objp` is just a replicated array of coordinates, and `objpoints` will be appended with a copy of it every time I successfully detect all chessboard corners in a test image.  `imgpoints` will be appended with the (x, y) pixel position of each of the corners in the image plane with each successful chessboard detection.  
