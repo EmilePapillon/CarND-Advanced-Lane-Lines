@@ -34,7 +34,7 @@ The steps of this project are the following:
 
 #### 1. First, compute the camera matrix and distortion coefficients. Use the result to generate a distortion corrected calibration image.
 
-The camera image comes distorted by the lens, and this will be a problem for accurate lane marking detection. There are two types of distorsion, **angular** distorsion and **tangential** distorsion. 
+The camera image comes distorted by the lens, and this will be a problem for accurate lane marking detection. There are two types of distorsion, **radial** distorsion and **tangential** distorsion. 
 
 ![alt text][image1]
 
