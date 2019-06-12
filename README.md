@@ -18,8 +18,8 @@ The steps of this project are the following:
 
 [//]: # (Image References)
 
-[image1]: ./output_images/original_image.png "Original"
-[image2]: ./output_images/undistorted_image.png "Undistorted"
+[image1]: ./camera_cal/calibration1.jpg "Original"
+[image2]: ./output_images/calibration2.jpg "Undistorted"
 [image3]: ./output_images/thresholded_binary_image.png "Binary Example"
 [image4]: ./output_images/source_and_destination.png "Warp Example"
 [image5]: ./output_images/warped_result.png "Fit Visual"
@@ -36,17 +36,70 @@ The steps of this project are the following:
 
 #### 1. First, compute the camera matrix and distortion coefficients. Use the result to generate a distortion corrected calibration image.
 
-The camera image comes distorted by the lens, and this will be a problem for accurate lane marking detection. We first need to correct the image for distorsion using openCV. Refer to the Lane_Marking_Tracker.ipynb to follow along with the code. 
-
-The code for this step is contained in the second code cell of the Jupyter notebook located in "./Lane_Marking_Tracker.ipynb". The function calibrate(calibration_images_path='camera_cal/cal*.jpg') takes in as argument a string containing the glob wildcard to the calubration data. It returns the matrix mtx and the object dist to use with openCV's cv2.undistort() function to get the undistorted image.
-
-I start by preparing "object points", which will be the (x, y, z) coordinates of the chessboard corners in the world. Here I am assuming the chessboard is fixed on the (x, y) plane at z=0, such that the object points are the same for each calibration image.  Thus, `objp` is just a replicated array of coordinates, and `objpoints` will be appended with a copy of it every time I successfully detect all chessboard corners in a test image.  `imgpoints` will be appended with the (x, y) pixel position of each of the corners in the image plane with each successful chessboard detection.  
-
-I then used the output `objpoints` and `imgpoints` to compute the camera calibration and distortion coefficients using the `cv2.calibrateCamera()` function.  I applied this distortion correction to the test image using the `cv2.undistort()` function and obtained this result: 
+The camera image comes distorted by the lens, and this will be a problem for accurate lane marking detection. There are two types of distorsion, **angular** distorsion and **tangential** distorsion. 
 
 ![alt text][image1]
+
+Angular distorsion as the above image shows is when pixel position in the virtual 2D image differs from the actual position of the pixel by an amount defined by the angle about a focal point. 
+
 ![alt text][image2]
 
+Tangential distorsion is when distance between pixels differ by a linear amount when following a straight line in the image. The image above shows an example of tangential distorsion.
+
+Distorsion can be corrected using a transformation matrix. OpenCV can be used in conjunction with calibration images (usually of a chessboard) to obtain this calibration matrix. 
+
+We first need to correct the image for distorsion and will do so using openCV. This will be achieved using the `calibrate()` function.
+
+In the first part of this function, we create a Numpy array that will represent what the undistorted grid should look like : the corners of every square in the grid can be described by an array of equally spaced points accross the x and y axis. This grid is of dimension 9 x 6 as the chessboard that we will use for the camera calibration. 
+
+Finally, a container array is created for object points - the points in a theoretical undistorted image points will be stored under the variable name `objpoints` and for image points, the actual coordinates of the sqares corner in images, under the variable name `imgpoints`. We will later append points to those arrays. The `images` is a glob object with all the files containing our calibration grids : 
+
+``` python
+def calibrate(calibration_images_path='camera_cal/cal*.jpg'):
+    # prepare object points, like (0,0,0), (1,0,0), (2,0,0) ....,(6,5,0)
+    objp = np.zeros((6*9,3), np.float32)
+    objp[:,:2] = np.mgrid[0:9, 0:6].T.reshape(-1,2)
+
+    # Arrays to store object points and image points from all the images.
+    objpoints = [] # 3d points in real world space
+    imgpoints = [] # 2d points in image plane.
+
+    # Make a list of calibration images
+    images = glob.glob(calibration_images_path)
+```
+
+In the next section of code, we will run through all our calibration files and call the `ct2.findChessboardCorners()` function to return the coordinate of the distorted chessboard square corners. If those points are found by the function, we will use that file for the calibration, so we append it to the container arrays. 
+
+``` python
+    for idx, fname in enumerate(images):
+            img = cv2.imread(fname)
+            gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+            # Find the chessboard corners
+            ret, corners = cv2.findChessboardCorners(gray, (9,6), None)
+
+            # If found, add object points, image points
+            if ret == True:
+                objpoints.append(objp)
+                imgpoints.append(corners)
+
+```
+
+In the next code block, we finally calculate a calibration matrix using `cv2.calibrateCamera()` and passing our ground truth and real images. 
+
+```python
+img_size = (img.shape[1], img.shape[0])
+    # Do camera calibration given object points and image points
+    ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, img_size,None,None)
+    return ret, mtx, dist
+```
+The following function simply uses the matrix we computed previously to undistort any image taken using the same camera as the one used to calculate the matrix. 
+
+```python
+def undistort(img,mtx,dist):
+    dst = cv2.undistort(img, mtx, dist, None, mtx)
+    return dst
+```
 
 #### 2. Use color transforms, gradients or other methods to create a thresholded binary image. Below is an example of a binary image result.
 
