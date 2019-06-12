@@ -1,7 +1,7 @@
 
 ---
 
-**Lane Marking Segmentation*
+**Lane Marking Segmentation**
 
 Finding lane markings is essential for self-driving cars to operate properly on a road. The following presents an algorithm to achieve such tracking using color thresholding, sliding windows and polynomial fitting. The result is a description of the lane markings that we can use to do path planning or control the vehicle. The results here is used to plot the lane marking over the image. 
 
