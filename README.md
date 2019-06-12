@@ -154,13 +154,28 @@ def hls_thresh(image):
 
 the `binary_S` and `binary_L` variable in the code above are binary pixel maps, where 1s represent the pixel activations where the original image's pixel values where above the specified thresholds.
 
-Binary maps are useful to use binary operations like intersection or union. 
+Binary maps are useful to use binary operations like intersection or union.
 
-Using thresholding in python is simple 
+The other function `abs_sobel_thresh()` is another thresholding techcnique. This time it is based on intensity gradients taken from a grayscale input image. The gradients quatify how quicly intensity varies accross the image. The variation can be taken in different direction. Here, we used the horizontal direction as the direction of choice because lane markings will most likely be vertical, so the gradient of pixels following the horizontal direction will be high when we encounter them. The 'cv2.Sobel()' function calculates the gradients. Thresholding is then used to filter out the pixel with low gradient values. A binary array is returned.
 
 ![alt text][image3]
 
-I used sobel directional threshold, and HLS color space thresholding using the L and S layers because I found them to be the most effectives ones at selecting lane markings. S (saturation) layer information is particularly useful for the yellow lines. 
+I used sobel directional threshold, and HLS color space thresholding using the L and S layers because I found them to be the most effectives ones at selecting lane markings. S (saturation) layer information is particularly useful for the yellow lines.
+
+The follwing function removes the perspective from the image :  
+
+``` python
+def warper(img, src, dst):
+
+    # Compute and apply perpective transform
+    img_size = (img.shape[1], img.shape[0])
+    M = cv2.getPerspectiveTransform(src, dst)
+    Minv = cv2.getPerspectiveTransform(dst, src)
+    warped = cv2.warpPerspective(img, M, img_size, flags=cv2.INTER_NEAREST)  # keep same size as input image
+
+    return warped,M,Minv
+#returns: a birds eye version of the binary
+```  
 
 #### 3. Then, perform a perspective transform and (example of a transformed image below).
 
