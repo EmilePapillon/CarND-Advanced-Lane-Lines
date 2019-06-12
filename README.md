@@ -18,15 +18,13 @@ The steps of this project are the following:
 
 [//]: # (Image References)
 
-[image1]: ./camera_cal/calibration1.jpg "Original"
-[image2]: ./camera_cal/calibration2.jpg "Undistorted"
+[image1]: ./output_images/calibration1.jpg "Original"
+[image2]: ./output_images/calibration2.jpg "Undistorted"
 [image3]: ./output_images/thresholded_binary_image.png "Binary Example"
 [image4]: ./output_images/source_and_destination.png "Warp Example"
 [image5]: ./output_images/warped_result.png "Fit Visual"
 [image6]: ./output_images/unwarped_result.png "Output"
 [image7]: ./output_images/curvature.png "Curvature"
-
-## [Rubric](https://review.udacity.com/#!/rubrics/571/view) Points
 
 ---
 
@@ -36,15 +34,15 @@ The steps of this project are the following:
 
 #### 1. First, compute the camera matrix and distortion coefficients. Use the result to generate a distortion corrected calibration image.
 
-The camera image comes distorted by the lens, and this will be a problem for accurate lane marking detection. There are two types of distorsion, **angular** distorsion and **tangential** distorsion. 
+The camera image comes distorted by the lens, and this will be a problem for accurate lane marking detection. There are two types of distorsion, **radial** distorsion and **tangential** distorsion. 
 
-![alt text][image1 | width=48]
+![alt text][image1]
 
-Angular distorsion as the above image shows is when pixel position in the virtual 2D image differs from the actual position of the pixel by an amount defined by the angle about a focal point. 
+Radial distorsion make image appear more curved thant they actually are. This is due to lens curvature.. 
 
 ![alt text][image2]
 
-Tangential distorsion is when distance between pixels differ by a linear amount when following a straight line in the image. The image above shows an example of tangential distorsion.
+Tangential distorsion is when lines that are really parallel seems to be converging on an image. This happens because the camera lens is not aligned perfectly parallel to the imaging plane, where the camera sensor or film  is. 
 
 Distorsion can be corrected using a transformation matrix. OpenCV can be used in conjunction with calibration images (usually of a chessboard) to obtain this calibration matrix. 
 
