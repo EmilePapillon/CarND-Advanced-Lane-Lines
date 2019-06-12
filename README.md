@@ -19,7 +19,7 @@ The steps of this project are the following:
 [//]: # (Image References)
 
 [image1]: ./camera_cal/calibration1.jpg "Original"
-[image2]: ./output_images/calibration2.jpg "Undistorted"
+[image2]: ./camera_cal/calibration2.jpg "Undistorted"
 [image3]: ./output_images/thresholded_binary_image.png "Binary Example"
 [image4]: ./output_images/source_and_destination.png "Warp Example"
 [image5]: ./output_images/warped_result.png "Fit Visual"
