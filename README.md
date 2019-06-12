@@ -38,7 +38,7 @@ The steps of this project are the following:
 
 The camera image comes distorted by the lens, and this will be a problem for accurate lane marking detection. There are two types of distorsion, **angular** distorsion and **tangential** distorsion. 
 
-![alt text](image1 =50x50)
+![alt text](image1 | width=48)
 
 Angular distorsion as the above image shows is when pixel position in the virtual 2D image differs from the actual position of the pixel by an amount defined by the angle about a focal point. 
 
