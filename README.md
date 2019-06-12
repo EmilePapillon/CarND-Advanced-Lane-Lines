@@ -25,6 +25,8 @@ The steps of this project are the following:
 [image5]: ./output_images/warped_result.png "Fit Visual"
 [image6]: ./output_images/unwarped_result.png "Output"
 [image7]: ./output_images/curvature.png "Curvature"
+[image6]: ./equations/radial_distortion_correction.png "radial_distortion_correction.png"
+[image7]: ./equations/tangential_distortion_correction.png "tangential_distortion_correction.png"
 
 ---
 
@@ -38,11 +40,19 @@ The camera image comes distorted by the lens, and this will be a problem for acc
 
 ![alt text][image1]
 
-Radial distorsion make image appear more curved thant they actually are. This is due to lens curvature.. 
+Radial distorsion make image appear more curved thant they actually are. This is due to lens curvature.
+
+The following equation express the required translation for each pixel to correct radial distorsion : 
+
+![alt text][image6]
 
 ![alt text][image2]
 
 Tangential distorsion is when lines that are really parallel seems to be converging on an image. This happens because the camera lens is not aligned perfectly parallel to the imaging plane, where the camera sensor or film  is. 
+
+The following equations relate the positions of the distorted image pixels to their corrected counterparts. It defines the translation required for every pixels.
+
+![alt text][image7]
 
 Distorsion can be corrected using a transformation matrix. OpenCV can be used in conjunction with calibration images (usually of a chessboard) to obtain this calibration matrix. 
 
