@@ -42,7 +42,7 @@ The camera image comes distorted by the lens, and this will be a problem for acc
 
 Radial distorsion make image appear more curved thant they actually are. This is due to lens curvature.
 
-The following equation express the required translation for each pixel to correct radial distorsion : 
+The following equations express the required translation for each pixel to correct radial distorsion : 
 
 ![alt text][image8]
 
