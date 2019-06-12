@@ -162,6 +162,11 @@ The other function `abs_sobel_thresh()` is another thresholding techcnique. This
 
 I used sobel directional threshold, and HLS color space thresholding using the L and S layers because I found them to be the most effectives ones at selecting lane markings. S (saturation) layer information is particularly useful for the yellow lines.
 
+
+#### 3. Then, perform a perspective transform and (example of a transformed image below).
+
+We are trying to get the curvature information from the lane marking. To do this, we first need to transform the image to abstract the perspective inherent to camera images.
+
 The follwing function removes the perspective from the image :  
 
 ``` python
@@ -176,12 +181,7 @@ def warper(img, src, dst):
     return warped,M,Minv
 #returns: a birds eye version of the binary
 ```  
-
-#### 3. Then, perform a perspective transform and (example of a transformed image below).
-
-We are trying to get the curvature information from the lane marking. To do this, we first need to transform the image to abstract the perspective inherent to camera images.
-
-The code for my perspective transform includes a function called `warper()`, which appears in cell 4 in the Jupyter Notebook `Lane_Marking_Tracker.ipynb` (./Lane_Marking_Tracker.ipynb).  The `warper()` function takes as inputs an image (`img`), as well as source (`src`) and destination (`dst`) points.  I chose the hardcode the source and destination points in the following manner:
+The `warper()` function takes as inputs an image (`img`), as well as source (`src`) and destination (`dst`) points.  I chose the hardcode the source and destination points in the following manner:
 
 ```python
     img_size = binary_image.shape[::-1]
