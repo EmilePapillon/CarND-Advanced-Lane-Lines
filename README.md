@@ -18,15 +18,13 @@ The steps of this project are the following:
 
 [//]: # (Image References)
 
-[image1]: ./camera_cal/calibration1.jpg "Original"
-[image2]: ./camera_cal/calibration2.jpg "Undistorted"
+[image1]: ./output_images/calibration1.jpg "Original"
+[image2]: ./output_images/calibration2.jpg "Undistorted"
 [image3]: ./output_images/thresholded_binary_image.png "Binary Example"
 [image4]: ./output_images/source_and_destination.png "Warp Example"
 [image5]: ./output_images/warped_result.png "Fit Visual"
 [image6]: ./output_images/unwarped_result.png "Output"
 [image7]: ./output_images/curvature.png "Curvature"
-
-## [Rubric](https://review.udacity.com/#!/rubrics/571/view) Points
 
 ---
 
