@@ -29,8 +29,6 @@ The steps of this project are the following:
 [image9]: ./equations/tangential_distortion_correction.png "tangential_distortion_correction.png"
 
 ---
-this is good times
-
 
 ### Lane marking detection using sliding windows.
 
