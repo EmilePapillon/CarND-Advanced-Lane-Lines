@@ -109,11 +109,54 @@ def undistort(img,mtx,dist):
     return dst
 ```
 
-#### 2. Use color transforms, gradients or other methods to create a thresholded binary image. Below is an example of a binary image result.
+#### 2. Use color transforms, gradients or other methods to create a thresholded binary image. 
 
 The first step is to get rid of some noise by applying color space thresholding to the original frames.
 
-I used a combination of color and gradient thresholds to generate a binary image (thresholding steps in the third code cell of the Jupyter notebook located in "./Lane_Marking_Tracker.ipynb".  Here's an example of my output for this step. 
+Image files typipcally contain RGB values of pixels. Hue Lightness Saturation (HLS) color space is another form of representing digital images. It uses those 3 properties of light to encode the color of every pixels. If one want to select all the pixel with a red value above 100, for example, one could use code like the following to obtain the indices :
+
+``` python
+red_threshold = 100
+R= image[:,:,1] #selecting the red channel
+R > red_threshold 
+```
+
+We can also combine filters like so :
+``` python
+R = image[:,:,1]
+G = image[:,:,2]
+index = (R > red_threshold) & (G > green_threshold) #bitwise and operation
+```
+
+But what if we're intested in any "colorful" pixels? The intuitive concept of colorfulness is represented in HSV space by the saturation layer, or S layer. So in a similar way, we can obtain the yellow line markings by observing all its pixels have a high saturation and lightness : 
+
+``` python
+def hls_thresh(image):
+    hls = cv2.cvtColor(image, cv2.COLOR_BGR2HLS) #converting the RGB image to HLS color space
+
+    thresh = {'L': (180,255),
+              'S': (180,255)}  
+    
+    S = hls[:,:,2]
+    L = hls[:,:,1]
+
+    binary_S = np.zeros_like(S)
+    binary_S[(S > thresh['S'][0]) & (S <= thresh['S'][1])] = 1 #making all the pixels corresponding to this threshold "1"
+    
+    binary_L = np.zeros_like(L)
+    binary_L[(L > thresh['L'][0]) & (L <= thresh['L'][1])] = 1
+    
+    combined_hls = np.zeros_like(S)
+    combined_hls[(binary_S == 1) | (binary_L == 1)] = 1 
+    
+    return combined_hls
+```
+
+the `binary_S` and `binary_L` variable in the code above are binary pixel maps, where 1s represent the pixel activations where the original image's pixel values where above the specified thresholds.
+
+Binary maps are useful to use binary operations like intersection or union. 
+
+Using thresholding in python is simple 
 
 ![alt text][image3]
 
