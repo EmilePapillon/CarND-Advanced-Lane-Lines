@@ -3,7 +3,7 @@
 
 **Advanced Lane Finding Project**
 
-Finding lane markings plays a key role in scene segmentation used in self-driving vehicles. The following presents an algorithm to achieve such tracking using color thresholding, sliding windows and polynomial fitting. The result is a description of the lane markings that we can use to do path planning or control the vehicle. The results here is used to plot the lane marking over the image. 
+Finding lane markings plays a key role in scene segmentation used in self-driving vehicles. The following presents an algorithm to achieve such tracking using color thresholding, sliding windows for tracking a line in an image and polynomial fitting. The result is a description of the lane markings that we can use to do path planning or control the vehicle. The results here is used to plot the lane marking over the image. 
 
 The steps of this project are the following:
 
